@@ -19,9 +19,11 @@ exports.getArticles = (req, res, next) => {
 };
 
 exports.patchArticleById = (req, res, next) => {
-  const { article_id, inc_votes } = req.params;
-  console.log('inside patchArticleById');
-  updateArticleById(article_id, inc_votes).then((updatedArticle) => {
+  const { article_id } = req.params;
+  const { inc_vote } = req.body;
+  console.log('from patchArticlebyId', inc_vote);
+
+  updateArticleById(article_id, inc_vote).then((updatedArticle) => {
     res.status(200).send({ updatedArticle });
   });
 };

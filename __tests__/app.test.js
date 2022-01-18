@@ -77,17 +77,13 @@ describe('PATCH /api/articles', () => {
 
 describe('5. PATCH /api/artilces/:articles_id', () => {
   test('status:200, responds with the updated article', () => {
-    const articleUpdates = { inc_votes: 1 };
+    const articleUpdates = { inc_vote: 1 };
     return request(app)
       .patch('/api/articles/1')
       .send(articleUpdates)
       .expect(200)
       .then(({ body }) => {
-        expect(body.park).toEqual({
-          park_id: 3,
-          year_opened: 1987,
-          ...articleUpdates,
-        });
+        expect(body[0].votes).toBe(101);
       });
   });
 });
