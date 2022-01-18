@@ -15,11 +15,11 @@ exports.selectArticles = () => {
   });
 };
 
-exports.updateArticleByID = (article_id, inc_vote) => {
+exports.updateArticleById = (article_id, inc_vote) => {
   console.log('inside updateArticleId');
   return db
     .query(
-      `UPDATE articles SET votes = votes + $1 WHERE articles_id=$2 RETURNING *;`,
+      `UPDATE articles SET votes = votes + $1 WHERE article_id=$2 RETURNING *;`,
       [inc_vote, article_id]
     )
     .then((result) => {

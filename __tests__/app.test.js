@@ -83,7 +83,21 @@ describe('5. PATCH /api/artilces/:articles_id', () => {
       .send(articleUpdates)
       .expect(200)
       .then(({ body }) => {
-        expect(body[0].votes).toBe(101);
+        console.log(body.updatedArticle[0]);
+        expect(body.updatedArticle[0].votes).toBe(101);
+      });
+  });
+});
+
+describe('GET /api/artilces/:articles_id/comments', () => {
+  test('status:200, responds with an array of comments for the given article_id of which each comment', () => {
+    const articleUpdates = { inc_vote: 1 };
+    return request(app)
+      .patch('GET /api/articles/1/comments')
+      .send(articleUpdates)
+      .expect(200)
+      .then(({ body }) => {
+        expect('foo').toBe('bar');
       });
   });
 });

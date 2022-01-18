@@ -9,6 +9,7 @@ const testData = require('../db/data/test-data/index.js');
 const { seed } = require('../db/seeds/seed.js');
 const request = require('supertest');
 const app = require('../app');
+const { newVote } = require('../utils/articleUtils.js');
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -76,5 +77,32 @@ describe('formattedCommentData()', () => {
   test('should return a pg-format compatible array of comment objects', () => {
     console.log(formatCommentData(testData.commentData));
     expect(formatCommentData(testData.commentData)).toEqual([]);
+  });
+});
+
+describe('newVote()', () => {
+  test('should return and empty object if passed undefined ', () => {
+    expect(newVote()).toEqual([]);
+  });
+  const obj = {
+    article_id: 1,
+    title: 'Living in the shadow of a great man',
+    topic: 'mitch',
+    body: 'I find this existence challenging',
+    votes: 100,
+    author: 'butter_bridge',
+    created_at: '2020-07-08T23:00:00.000Z',
+  };
+  test('should return updated article object', () => {
+    console.log(newVote(obj, 1));
+    expect(newVote(obj, 1)).toEqual({
+      article_id: 1,
+      title: 'Living in the shadow of a great man',
+      topic: 'mitch',
+      body: 'I find this existence challenging',
+      votes: 101,
+      author: 'butter_bridge',
+      created_at: '2020-07-08T23:00:00.000Z',
+    });
   });
 });

@@ -18,6 +18,7 @@ app.get('/api/articles/:article_id', getArticles);
 app.patch('/api/articles/:article_id', patchArticleById);
 
 app.use((err, req, res, next) => {
+  console.log('got to use', err);
   res.status(500).send({ msg: err });
 });
 
