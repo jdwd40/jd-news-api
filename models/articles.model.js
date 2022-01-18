@@ -1,0 +1,28 @@
+const db = require('../db/connection');
+
+exports.selectArticlesById = (article_id) => {
+  return db
+    .query(`SELECT * FROM articles WHERE article_id=$1`, [article_id])
+    .then((res) => {
+      console.log('from selectArticlesByID >>> ', res.rows);
+      return res.rows;
+    });
+};
+
+exports.selectArticles = () => {
+  return db.query('SELECT * FROM articles;').then((res) => {
+    return res.rows;
+  });
+};
+
+exports.updateArticleByID = (article_id, inc_votes) => {
+  console.log('inside updateArticleId');
+  return db
+    .query(`UPDATE articles SET votes = votes + $1 WHERE articles_id=$2`, [
+      inc_votes,
+      article_id,
+    ])
+    .then((result) => {
+      return result.rows;
+    });
+};
