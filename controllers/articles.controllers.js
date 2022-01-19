@@ -1,8 +1,10 @@
+const articles = require('../db/data/test-data/articles');
 const {
   selectArticlesById,
   selectArticles,
   updateArticleById,
 } = require('../models/articles.model');
+const { selectCommentsById } = require('../models/topics.model');
 
 exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
@@ -31,9 +33,15 @@ exports.patchArticleById = (req, res, next) => {
       console.log(updatedArticle);
       res.status(200).send({ updatedArticle });
     })
-    .catch(next);
+    .catch((err) => {
+      next(err);
+    });
 };
 
 exports.getCommentsByArticleId = (req, res, next) => {
   const { article_id } = req.params;
+  console.log('inside getComments article_id: ', article_id);
+  return selectCommentsById(article_id).then((comments) => {
+    res.status(200).send({ comments });
+  });
 };

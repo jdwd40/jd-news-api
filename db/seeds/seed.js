@@ -60,7 +60,7 @@ const seed = (data) => {
           body TEXT,
           author TEXT REFERENCES users(username),
           article_id INT REFERENCES articles(article_id),
-          votes INT,
+          votes INT DEFAULT 0,
           created_at DATE
         );`);
     })

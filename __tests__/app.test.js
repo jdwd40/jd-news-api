@@ -87,13 +87,84 @@ describe('5. PATCH /api/artilces/:articles_id', () => {
 
 describe('GET /api/articles/:articles_id/comments', () => {
   test('status:200, responds with an array of comments for the given article_id of which each comment', () => {
-    const articleUpdates = { inc_vote: 1 };
     return request(app)
-      .patch('GET /api/articles/1/comments')
-      .send(articleUpdates)
+      .get('/api/articles/1/comments')
       .expect(200)
-      .then(({ body }) => {
-        expect('foo').toBe('bar');
+      .then((res) => {
+        console.log('from test: returned body: ', res.body);
+        expect(res.body.comments).toEqual([
+          2,
+          14,
+          '2020-10-31T00:00:00.000Z',
+          'butter_bridge',
+          'The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.',
+          3,
+          100,
+          '2020-03-01T00:00:00.000Z',
+          'icellusedkars',
+          'Replacing the quiet elegance of the dark suit and tie with the casual indifference of these muted earth tones is a form of fashion suicide, but, uh, call me crazy — onyou it works.',
+          4,
+          -100,
+          '2020-02-23T00:00:00.000Z',
+          'icellusedkars',
+          ' I carry a log — yes. Is it funny to you? It is not to me.',
+          5,
+          0,
+          '2020-11-03T00:00:00.000Z',
+          'icellusedkars',
+          'I hate streaming noses',
+          6,
+          0,
+          '2020-04-10T23:00:00.000Z',
+          'icellusedkars',
+          'I hate streaming eyes even more',
+          7,
+          0,
+          '2020-05-14T23:00:00.000Z',
+          'icellusedkars',
+          'Lobster pot',
+          8,
+          0,
+          '2020-04-13T23:00:00.000Z',
+          'icellusedkars',
+          'Delicious crackerbreads',
+          9,
+          0,
+          '2020-01-01T00:00:00.000Z',
+          'icellusedkars',
+          'Superficially charming',
+          12,
+          0,
+          '2020-03-02T00:00:00.000Z',
+          'icellusedkars',
+          'Massive intercranial brain haemorrhage',
+          13,
+          0,
+          '2020-06-14T23:00:00.000Z',
+          'icellusedkars',
+          'Fruit pastilles',
+          18,
+          16,
+          '2020-07-20T23:00:00.000Z',
+          'butter_bridge',
+          'This morning, I showered for nine minutes.',
+        ]);
+      });
+  });
+});
+
+describe('POST /api/articles/:article_id/comments', () => {
+  test('status 201: accepts object and returns new comment', () => {
+    return request(app)
+      .post('/api/articles/9/comments')
+      .send({
+        username: 'butter_bridge',
+        body: 'Test Post!',
+      })
+      .expect(201)
+      .then((res) => {
+        console.log(res.body, 'RES OUTPUT');
+        expect(res.body.comment).toEqual('Test Post!');
       });
   });
 });
