@@ -45,9 +45,9 @@ const seed = (data) => {
         CREATE TABLE articles (
           article_id SERIAL PRIMARY KEY,
           title TEXT,
-          topic TEXT REFERENCES topic(slug),
+          topic TEXT REFERENCES topics(slug),
           body TEXT,
-          votes INT,
+          votes INT DEFAULT 0,
           author TEXT REFERENCES users(username),
           created_at DATE DEFAULT CURRENT_TIMESTAMP
         );`);

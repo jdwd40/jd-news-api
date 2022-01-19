@@ -13,12 +13,12 @@ app.get('/api/topics', getTopic);
 
 app.get('/api/articles/:article_id', getArticleById);
 
-app.get('/api/articles/:article_id', getArticles);
+app.get('/api/articles/', getArticles);
 
 app.patch('/api/articles/:article_id', patchArticleById);
 
 app.use((err, req, res, next) => {
-  console.log('got to use', err);
+  console.log(' >>>>>>>>>> got to use', err);
   res.status(500).send({ msg: err });
 });
 

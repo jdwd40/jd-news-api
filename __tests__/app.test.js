@@ -49,24 +49,20 @@ describe('GET /api/articles:id', () => {
         });
       });
   });
+  test('status:400, responds with an error message when passed a bad article ID', () => {
+    return request(app)
+      .get('/api/articles/notAnID')
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Invalid input');
+      });
+  });
 });
 
 describe('GET /api/articles', () => {
   test('200: responds with an array of articles', () => {
     return request(app)
       .get('/api/articles')
-      .expect(200)
-      .then((res) => {
-        console.log(res.body.length);
-        expect(res.body).toHaveLength(12);
-      });
-  });
-});
-
-describe('PATCH /api/articles', () => {
-  test('200: updates a record in the database', () => {
-    return request(app)
-      .patch('/api/articles/1')
       .expect(200)
       .then((res) => {
         console.log(res.body.length);
@@ -89,7 +85,7 @@ describe('5. PATCH /api/artilces/:articles_id', () => {
   });
 });
 
-describe('GET /api/artilces/:articles_id/comments', () => {
+describe('GET /api/articles/:articles_id/comments', () => {
   test('status:200, responds with an array of comments for the given article_id of which each comment', () => {
     const articleUpdates = { inc_vote: 1 };
     return request(app)

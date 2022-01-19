@@ -20,11 +20,20 @@ exports.getArticles = (req, res, next) => {
 
 exports.patchArticleById = (req, res, next) => {
   const { article_id } = req.params;
+  // if (typeof article_id !== integer) {
+  //   console.log('Not an integer');
+  // }
   const { inc_vote } = req.body;
   console.log('from patchArticlebyId', inc_vote);
   console.log(typeof inc_vote);
-  updateArticleById(article_id, inc_vote).then((updatedArticle) => {
-    //console.log(updatedArticle);
-    res.status(200).send({ updatedArticle });
-  });
+  updateArticleById(article_id, inc_vote)
+    .then((updatedArticle) => {
+      console.log(updatedArticle);
+      res.status(200).send({ updatedArticle });
+    })
+    .catch(next);
+};
+
+exports.getCommentsByArticleId = (req, res, next) => {
+  const { article_id } = req.params;
 };
