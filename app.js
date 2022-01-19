@@ -6,7 +6,10 @@ const {
   patchArticleById,
   getCommentsByArticleId,
 } = require('./controllers/articles.controllers');
-const { postComment } = require('./controllers/comments.controllers');
+const {
+  postComment,
+  deleteComment,
+} = require('./controllers/comments.controllers');
 const { handle404s } = require('./error');
 
 const app = express();
@@ -22,6 +25,8 @@ app.get('/api/articles/', getArticles);
 app.patch('/api/articles/:article_id', patchArticleById);
 
 app.get('/api/articles/:article_id/comments', getCommentsByArticleId);
+
+app.delete('/api/comments/:comment_id', deleteComment);
 
 app.post('/api/articles/:article_id/comments', postComment);
 

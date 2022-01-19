@@ -10,7 +10,11 @@ exports.postCommentByArticleId = (article_id, author, body) => {
       const post = res.rows[0];
       console.log(post, 'from postCommentsById');
       const message = post.body;
-      console.log('message', message);
+      console.log('message:', message);
       return message;
     });
+};
+
+exports.deleteCommentById = (comment_id) => {
+  return db.query(`DELETE FROM comments WHERE comment_id=$1;`, [comment_id]);
 };

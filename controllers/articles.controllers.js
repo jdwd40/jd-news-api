@@ -9,7 +9,11 @@ const { selectCommentsById } = require('../models/topics.model');
 exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
   return selectArticlesById(article_id).then((article) => {
-    res.status(200).send(article);
+    if (article.length === 0) {
+      res.status(400).send({ msg: 'Article Not Found' });
+    } else {
+      res.status(200).send(article);
+    }
   });
 };
 

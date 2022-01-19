@@ -51,10 +51,10 @@ describe('GET /api/articles:id', () => {
   });
   test('status:400, responds with an error message when passed a bad article ID', () => {
     return request(app)
-      .get('/api/articles/notAnID')
+      .get('/api/articles/1000')
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe('Invalid input');
+        expect(body.msg).toBe('Article Not Found');
       });
   });
 });
@@ -166,5 +166,11 @@ describe('POST /api/articles/:article_id/comments', () => {
         console.log(res.body, 'RES OUTPUT');
         expect(res.body.comment).toEqual('Test Post!');
       });
+  });
+});
+
+describe('DELETE /api/comments/:comment_id', () => {
+  test('status 204 accepts object and returns new comment', () => {
+    return request(app).delete('/api/comments/18').expect(204);
   });
 });
