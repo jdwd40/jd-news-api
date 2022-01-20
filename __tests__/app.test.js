@@ -167,10 +167,35 @@ describe('POST /api/articles/:article_id/comments', () => {
         expect(res.body.comment).toEqual('Test Post!');
       });
   });
+  test('status 400: catches the null value error when trying to post an empty comment', () => {
+    return request(app)
+      .post('/api/articles/9/comments')
+      .send({
+        username: 'butter_bridge',
+        body: null,
+      })
+      .expect(400)
+      .then((res) => {
+        console.log(res.body, 'RES OUTPUT');
+        expect(res.body.msg).toEqual('Bad Request - Tried to send Null Value');
+      });
+  });
 });
 
 describe('DELETE /api/comments/:comment_id', () => {
   test('status 204 accepts object and returns new comment', () => {
     return request(app).delete('/api/comments/18').expect(204);
+  });
+});
+
+describe('Error handling testing', () => {
+  test('status 404 - catches 404 errors and displays cutom message', () => {
+    return request(app)
+      .get('/api/notanendpoint')
+      .expect(404)
+      .then((res) => {
+        console.log(Object.keys(res));
+        expect(res.msg).toBe('Invalid Endpoint');
+      });
   });
 });

@@ -10,7 +10,7 @@ const {
   postComment,
   deleteComment,
 } = require('./controllers/comments.controllers');
-const { handle404s } = require('./error');
+const { handle404s, psqlErrorHandling } = require('./error');
 
 const app = express();
 
@@ -30,11 +30,8 @@ app.delete('/api/comments/:comment_id', deleteComment);
 
 app.post('/api/articles/:article_id/comments', postComment);
 
-//app.all('*', handle404s);
+app.all('*', handle404s);
 
-app.use((err, req, res, next) => {
-  console.log(' >>>>>>>>>> got to use', err);
-  res.status(500).send({ msg: err });
-});
+app.use(psqlErrorHandling);
 
 module.exports = app;

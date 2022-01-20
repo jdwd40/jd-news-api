@@ -7,9 +7,16 @@ exports.postComment = (req, res, next) => {
   const { article_id } = req.params;
   const { username: author } = req.body;
   const { body } = req.body;
-  postCommentByArticleId(article_id, author, body).then((comment) => {
-    res.status(201).send({ comment });
-  });
+  // if (body === '' || body === undefined || body === null) {
+  //   res.status(400).send({ msg: 'Bad Request - Tried to send Null Value' });
+  // }
+  postCommentByArticleId(article_id, author, body)
+    .then((comment) => {
+      res.status(201).send({ comment });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 exports.deleteComment = (req, res, next) => {
