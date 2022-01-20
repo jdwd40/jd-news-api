@@ -81,7 +81,6 @@ describe('GET /api/articles', () => {
       .get('/api/articles')
       .expect(200)
       .then((res) => {
-        console.log(res.body.length);
         expect(res.body).toBeInstanceOf(Array);
       });
   });
@@ -92,6 +91,133 @@ describe('GET /api/articles', () => {
       .then((res) => {
         console.log(res.body.length);
         expect(res.body).toHaveLength(12);
+      });
+  });
+  test('responds with an array of articles sorted in decending odrer', () => {
+    return request(app)
+      .get('/api/articles?order_by=DESC')
+      .expect(200)
+      .then((res) => {
+        console.log(res.body);
+        expect(res.body).toEqual([
+          {
+            article_id: 3,
+            title: 'Eight pug gifs that remind me of mitch',
+            topic: 'mitch',
+            body: 'some gifs',
+            votes: 0,
+            author: 'icellusedkars',
+            created_at: '2020-11-03T00:00:00.000Z',
+          },
+          {
+            article_id: 6,
+            title: 'A',
+            topic: 'mitch',
+            body: 'Delicious tin of cat food',
+            votes: 0,
+            author: 'icellusedkars',
+            created_at: '2020-10-17T23:00:00.000Z',
+          },
+          {
+            article_id: 2,
+            title: 'Sony Vaio; or, The Laptop',
+            topic: 'mitch',
+            body: 'Call me Mitchell. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would buy a laptop about a little and see the codey part of the world. It is a way I have of driving off the spleen and regulating the circulation. Whenever I find myself growing grim about the mouth; whenever it is a damp, drizzly November in my soul; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people’s hats off—then, I account it high time to get to coding as soon as I can. This is my substitute for pistol and ball. With a philosophical flourish Cato throws himself upon his sword; I quietly take to the laptop. There is nothing surprising in this. If they but knew it, almost all men in their degree, some time or other, cherish very nearly the same feelings towards the the Vaio with me.',
+            votes: 0,
+            author: 'icellusedkars',
+            created_at: '2020-10-15T23:00:00.000Z',
+          },
+          {
+            article_id: 12,
+            title: 'Moustache',
+            topic: 'mitch',
+            body: 'Have you seen the size of that thing?',
+            votes: 0,
+            author: 'butter_bridge',
+            created_at: '2020-10-10T23:00:00.000Z',
+          },
+          {
+            article_id: 5,
+            title: 'UNCOVERED: catspiracy to bring down democracy',
+            topic: 'cats',
+            body: 'Bastet walks amongst us, and the cats are taking arms!',
+            votes: 0,
+            author: 'rogersop',
+            created_at: '2020-08-02T23:00:00.000Z',
+          },
+          {
+            article_id: 1,
+            title: 'Living in the shadow of a great man',
+            topic: 'mitch',
+            body: 'I find this existence challenging',
+            votes: 100,
+            author: 'butter_bridge',
+            created_at: '2020-07-08T23:00:00.000Z',
+          },
+          {
+            article_id: 9,
+            title: "They're not exactly dogs, are they?",
+            topic: 'mitch',
+            body: 'Well? Think about it.',
+            votes: 0,
+            author: 'butter_bridge',
+            created_at: '2020-06-05T23:00:00.000Z',
+          },
+          {
+            article_id: 10,
+            title: 'Seven inspirational thought leaders from Manchester UK',
+            topic: 'mitch',
+            body: "Who are we kidding, there is only one, and it's Mitch!",
+            votes: 0,
+            author: 'rogersop',
+            created_at: '2020-05-13T23:00:00.000Z',
+          },
+          {
+            article_id: 4,
+            title: 'Student SUES Mitch!',
+            topic: 'mitch',
+            body: 'We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages',
+            votes: 0,
+            author: 'rogersop',
+            created_at: '2020-05-05T23:00:00.000Z',
+          },
+          {
+            article_id: 8,
+            title: 'Does Mitch predate civilisation?',
+            topic: 'mitch',
+            body: 'Archaeologists have uncovered a gigantic statue from the dawn of humanity, and it has an uncanny resemblance to Mitch. Surely I am not the only person who can see this?!',
+            votes: 0,
+            author: 'icellusedkars',
+            created_at: '2020-04-16T23:00:00.000Z',
+          },
+          {
+            article_id: 11,
+            title: 'Am I a cat?',
+            topic: 'mitch',
+            body: 'Having run out of ideas for articles, I am staring at the wall blankly, like a cat. Does this make me a cat?',
+            votes: 0,
+            author: 'icellusedkars',
+            created_at: '2020-01-15T00:00:00.000Z',
+          },
+          {
+            article_id: 7,
+            title: 'Z',
+            topic: 'mitch',
+            body: 'I was hungry.',
+            votes: 0,
+            author: 'icellusedkars',
+            created_at: '2020-01-07T00:00:00.000Z',
+          },
+        ]);
+      });
+  });
+  test('responds with status 400 is order_by is passed an invalid sort query', () => {
+    return request(app)
+      .get('/api/articles?order_by=invalidsortquery')
+      .expect(400)
+      .then((res) => {
+        console.log(res.body);
+        expect(res.body.msg).toBe('Invalid order query');
       });
   });
 });

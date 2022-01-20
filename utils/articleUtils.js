@@ -7,7 +7,7 @@ exports.checkArticleById = (article_id) => {
   return selectArticlesById(article_id).then((article) => {
     console.log('inside checkArticleById ', article);
     if (article.length === 0) {
-      return false;
+      return;
     } else {
       return true;
     }

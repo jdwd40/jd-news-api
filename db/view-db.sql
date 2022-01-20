@@ -11,4 +11,6 @@
 
 --INSERT INTO comments (article_id, author, body) VALUES (9,'icellusedkars' , 'test mesage');
 
-SELECT * FROM comments;
+SELECT * FROM articles ORDER BY created_at DESC;
+
+--SELECT * FROM comments;

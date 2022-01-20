@@ -18,10 +18,21 @@ exports.getArticleById = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  //console.log('inside getArticles');
-  return selectArticles().then((articles) => {
-    res.status(200).send(articles);
-  });
+  const { sort_by } = req.query;
+  let { order_by } = req.query;
+  const { topic } = req.query;
+  console.log('orderby: ', order_by);
+  if (order_by !== 'ASC' && order_by !== 'DESC') {
+    return res.status(400).send({ msg: 'Invalid order query' });
+  }
+
+  return selectArticles(sort_by, order_by, topic)
+    .then((articles) => {
+      res.status(200).send(articles);
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 exports.patchArticleById = (req, res, next) => {

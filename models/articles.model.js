@@ -9,10 +9,12 @@ exports.selectArticlesById = (article_id) => {
     });
 };
 
-exports.selectArticles = () => {
-  return db.query('SELECT * FROM articles;').then((res) => {
-    return res.rows;
-  });
+exports.selectArticles = (sort_by = 'created_at', order_by = 'DESC', topic) => {
+  return db
+    .query(`SELECT * FROM articles ORDER BY ${sort_by} ${order_by};`)
+    .then((res) => {
+      return res.rows;
+    });
 };
 
 exports.updateArticleById = (article_id, inc_vote) => {
