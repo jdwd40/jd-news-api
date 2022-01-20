@@ -6,10 +6,11 @@ const {
 exports.postComment = (req, res, next) => {
   const { article_id } = req.params;
   const { username: author } = req.body;
-  const { body } = req.body;
-  // if (body === '' || body === undefined || body === null) {
-  //   res.status(400).send({ msg: 'Bad Request - Tried to send Null Value' });
-  // }
+  let { body } = req.body;
+  if (body === '') {
+    body = null;
+  }
+
   postCommentByArticleId(article_id, author, body)
     .then((comment) => {
       res.status(201).send({ comment });

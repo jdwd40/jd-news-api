@@ -8,6 +8,22 @@ beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
 describe('GET /api/topics', () => {
+  test('200: responds with an array', () => {
+    return request(app)
+      .get('/api/topics')
+      .expect(200)
+      .then((res) => {
+        expect(res.body.topics).toBeInstanceOf(Array);
+      });
+  });
+  test('200: responds with an array of topics', () => {
+    return request(app)
+      .get('/api/topics')
+      .expect(200)
+      .then((res) => {
+        expect(res.body.topics).toHaveLength(3);
+      });
+  });
   test('200: responds with an array of topics', () => {
     return request(app)
       .get('/api/topics')
@@ -60,7 +76,16 @@ describe('GET /api/articles:id', () => {
 });
 
 describe('GET /api/articles', () => {
-  test('200: responds with an array of articles', () => {
+  test('200: responds with an array', () => {
+    return request(app)
+      .get('/api/articles')
+      .expect(200)
+      .then((res) => {
+        console.log(res.body.length);
+        expect(res.body).toBeInstanceOf(Array);
+      });
+  });
+  test('200: responds with the correct length of array of articles', () => {
     return request(app)
       .get('/api/articles')
       .expect(200)
@@ -81,6 +106,16 @@ describe('5. PATCH /api/artilces/:articles_id', () => {
       .then(({ body }) => {
         console.log(body.updatedArticle[0]);
         expect(body.updatedArticle[0].votes).toBe(101);
+      });
+  });
+  test('status:400, responds with bad request if given invalid article ID', () => {
+    const articleUpdates = { inc_vote: 1 };
+    return request(app)
+      .patch('/api/articles/99999')
+      .send(articleUpdates)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Article Not Found');
       });
   });
 });
@@ -163,7 +198,7 @@ describe('POST /api/articles/:article_id/comments', () => {
       })
       .expect(201)
       .then((res) => {
-        console.log(res.body, 'RES OUTPUT');
+        //console.log(res.body, 'RES OUTPUT');
         expect(res.body.comment).toEqual('Test Post!');
       });
   });
@@ -173,6 +208,32 @@ describe('POST /api/articles/:article_id/comments', () => {
       .send({
         username: 'butter_bridge',
         body: null,
+      })
+      .expect(400)
+      .then((res) => {
+        console.log(res.body, 'RES OUTPUT');
+        expect(res.body.msg).toEqual('Bad Request - Tried to send Null Value');
+      });
+  });
+  test('status 400: catches an empty string error when trying to post an empty comment', () => {
+    return request(app)
+      .post('/api/articles/9/comments')
+      .send({
+        username: 'butter_bridge',
+        body: '',
+      })
+      .expect(400)
+      .then((res) => {
+        console.log(res.body, 'RES OUTPUT');
+        expect(res.body.msg).toEqual('Bad Request - Tried to send Null Value');
+      });
+  });
+  test('status 400: catches an undefined error when trying to post an empty comment', () => {
+    return request(app)
+      .post('/api/articles/9/comments')
+      .send({
+        username: 'butter_bridge',
+        body: undefined,
       })
       .expect(400)
       .then((res) => {

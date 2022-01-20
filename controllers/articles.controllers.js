@@ -30,12 +30,17 @@ exports.patchArticleById = (req, res, next) => {
   //   console.log('Not an integer');
   // }
   const { inc_vote } = req.body;
-  console.log('from patchArticlebyId', inc_vote);
-  console.log(typeof inc_vote);
+  // console.log('from patchArticlebyId', inc_vote);
+  // console.log(typeof inc_vote);
+
   updateArticleById(article_id, inc_vote)
     .then((updatedArticle) => {
       console.log(updatedArticle);
-      res.status(200).send({ updatedArticle });
+      if (updatedArticle.length === 0) {
+        res.status(400).send({ msg: 'Article Not Found' });
+      } else {
+        res.status(200).send({ updatedArticle });
+      }
     })
     .catch((err) => {
       next(err);

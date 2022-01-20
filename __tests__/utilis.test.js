@@ -5,6 +5,7 @@ const {
   formatArticleData,
   formatCommentData,
 } = require('../utils/formatData');
+const { checkArticleById } = require('../utils/articleUtils');
 const testData = require('../db/data/test-data/index.js');
 const { seed } = require('../db/seeds/seed.js');
 const request = require('supertest');
@@ -80,29 +81,11 @@ describe('formattedCommentData()', () => {
   });
 });
 
-describe('newVote()', () => {
-  test('should return and empty object if passed undefined ', () => {
-    expect(newVote()).toEqual([]);
+describe('checkArticleById()', () => {
+  test('should return true if the id matches with a current article ', () => {
+    expect(checkArticleById(1)).toBe(true);
   });
-  const obj = {
-    article_id: 1,
-    title: 'Living in the shadow of a great man',
-    topic: 'mitch',
-    body: 'I find this existence challenging',
-    votes: 100,
-    author: 'butter_bridge',
-    created_at: '2020-07-08T23:00:00.000Z',
-  };
-  test('should return updated article object', () => {
-    console.log(newVote(obj, 1));
-    expect(newVote(obj, 1)).toEqual({
-      article_id: 1,
-      title: 'Living in the shadow of a great man',
-      topic: 'mitch',
-      body: 'I find this existence challenging',
-      votes: 101,
-      author: 'butter_bridge',
-      created_at: '2020-07-08T23:00:00.000Z',
-    });
+  test('should return false, if the id does NOT match any current articles', () => {
+    expect(checkArticleById(99999)).toEqual(false);
   });
 });
