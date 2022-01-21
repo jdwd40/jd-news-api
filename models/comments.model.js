@@ -8,9 +8,7 @@ exports.postCommentByArticleId = (article_id, author, body) => {
     )
     .then((res) => {
       const post = res.rows[0];
-      console.log(post, 'from postCommentsById');
       const message = post.body;
-      console.log('message:', message);
       return message;
     });
 };

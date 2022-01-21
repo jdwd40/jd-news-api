@@ -31,7 +31,6 @@ exports.getArticles = (req, res, next) => {
   const { sort_by } = req.query;
   let { order_by } = req.query;
   const { topic } = req.query;
-  console.log('orderby: ', order_by);
   if (order_by !== 'ASC' && order_by !== 'DESC' && order_by !== undefined) {
     return res.status(400).send({ msg: 'Invalid order query' });
   }
@@ -47,10 +46,6 @@ exports.getArticles = (req, res, next) => {
 exports.patchArticleById = (req, res, next) => {
   const { article_id } = req.params;
   const { inc_vote } = req.body;
-  console.log(typeof article_id);
-  // if (typeof article_id !== 'number') {
-  //   res.status(400).send({ msg: 'Article Not Found' });
-  // }
 
   updateArticleById(article_id, inc_vote)
     .then((updatedArticle) => {

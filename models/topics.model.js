@@ -1,5 +1,4 @@
 const db = require('../db/connection');
-const { forEach } = require('../db/data/test-data/articles');
 
 exports.selectTopic = () => {
   return db.query('SELECT * FROM topics;').then((res) => {

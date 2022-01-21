@@ -9,15 +9,13 @@ const {
 
 const seed = (data) => {
   const { articleData, commentData, topicData, userData } = data;
-  // 1. create tables
+
   return db
     .query(`DROP TABLE IF EXISTS topics cascade;`)
     .then(() => {
-      // drop any existing shops table
       return db.query(`DROP TABLE IF EXISTS users cascade;`);
     })
     .then(() => {
-      // drop any existing shops table
       return db.query(`DROP TABLE IF EXISTS comments cascade;`);
     })
     .then(() => {
@@ -31,7 +29,6 @@ const seed = (data) => {
       );`);
     })
     .then(() => {
-      // continue from here...
       return db.query(`
         CREATE TABLE users (
           username TEXT PRIMARY KEY,
@@ -40,7 +37,6 @@ const seed = (data) => {
         );`);
     })
     .then(() => {
-      // continue from here...
       return db.query(`
         CREATE TABLE articles (
           article_id SERIAL PRIMARY KEY,
@@ -53,7 +49,6 @@ const seed = (data) => {
         );`);
     })
     .then(() => {
-      // continue from here...
       return db.query(`
         CREATE TABLE comments (
           comment_id SERIAL PRIMARY KEY,

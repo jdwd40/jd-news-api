@@ -22,7 +22,6 @@ exports.postComment = (req, res, next) => {
 
 exports.deleteComment = (req, res, next) => {
   const { comment_id } = req.params;
-  console.log('inside');
   deleteCommentById(comment_id).then(() => {
     res.status(204).end();
   });
