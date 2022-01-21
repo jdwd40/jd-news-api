@@ -11,7 +11,7 @@ const {
   deleteComment,
 } = require('./controllers/comments.controllers');
 const { handle404s, psqlErrorHandling } = require('./error');
-
+const { getAllEndpoints } = require('./utils/utils');
 const app = express();
 
 app.use(express.json());
@@ -29,6 +29,8 @@ app.get('/api/articles/:article_id/comments', getCommentsByArticleId);
 app.delete('/api/comments/:comment_id', deleteComment);
 
 app.post('/api/articles/:article_id/comments', postComment);
+
+app.get('/api', getAllEndpoints);
 
 app.all('*', handle404s);
 

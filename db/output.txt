@@ -15,3 +15,8 @@ You are now connected to database "nc_news_test" as user "jd".
           7 | Z                                                      | mitch | I was hungry.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |     0 | icellusedkars | 2020-01-07
 (12 rows)
 
+ count 
+-------
+    11
+(1 row)
+

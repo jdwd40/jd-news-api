@@ -14,3 +14,5 @@
 SELECT * FROM articles ORDER BY created_at DESC;
 
 --SELECT * FROM comments;
+
+SELECT count(*) FROM comments WHERE article_id=1;

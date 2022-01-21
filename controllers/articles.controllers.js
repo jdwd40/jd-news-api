@@ -5,16 +5,26 @@ const {
   updateArticleById,
 } = require('../models/articles.model');
 const { selectCommentsById } = require('../models/topics.model');
+const { countCommentsById } = require('../models/comments.model');
 
 exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
-  return selectArticlesById(article_id).then((article) => {
-    if (article.length === 0) {
-      res.status(400).send({ msg: 'Article Not Found' });
-    } else {
-      res.status(200).send(article);
-    }
-  });
+  console.log(typeof article_id);
+  return selectArticlesById(article_id)
+    .then((article) => {
+      return countCommentsById(article_id).then(article, commentCount);
+    })
+    .then((article, commentCount) => {
+      if (article.length === 0) {
+        res.status(400).send({ msg: 'Article Not Found' });
+      } else {
+        console.log('ccount:', commentCount);
+        res.status(200).send(article);
+      }
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 exports.getArticles = (req, res, next) => {
@@ -22,10 +32,9 @@ exports.getArticles = (req, res, next) => {
   let { order_by } = req.query;
   const { topic } = req.query;
   console.log('orderby: ', order_by);
-  if (order_by !== 'ASC' && order_by !== 'DESC') {
+  if (order_by !== 'ASC' && order_by !== 'DESC' && order_by !== undefined) {
     return res.status(400).send({ msg: 'Invalid order query' });
   }
-
   return selectArticles(sort_by, order_by, topic)
     .then((articles) => {
       res.status(200).send(articles);
@@ -37,16 +46,14 @@ exports.getArticles = (req, res, next) => {
 
 exports.patchArticleById = (req, res, next) => {
   const { article_id } = req.params;
-  // if (typeof article_id !== integer) {
-  //   console.log('Not an integer');
-  // }
   const { inc_vote } = req.body;
-  // console.log('from patchArticlebyId', inc_vote);
-  // console.log(typeof inc_vote);
+  console.log(typeof article_id);
+  // if (typeof article_id !== 'number') {
+  //   res.status(400).send({ msg: 'Article Not Found' });
+  // }
 
   updateArticleById(article_id, inc_vote)
     .then((updatedArticle) => {
-      console.log(updatedArticle);
       if (updatedArticle.length === 0) {
         res.status(400).send({ msg: 'Article Not Found' });
       } else {

@@ -3,6 +3,7 @@ const testData = require('../db/data/test-data/index.js');
 const { seed } = require('../db/seeds/seed.js');
 const request = require('supertest');
 const app = require('../app');
+const { countCommentsById } = require('../models/comments.model');
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -16,7 +17,7 @@ describe('GET /api/topics', () => {
         expect(res.body.topics).toBeInstanceOf(Array);
       });
   });
-  test('200: responds with an array of topics', () => {
+  test('200: responds with corrent array length', () => {
     return request(app)
       .get('/api/topics')
       .expect(200)
@@ -65,12 +66,20 @@ describe('GET /api/articles:id', () => {
         });
       });
   });
-  test('status:400, responds with an error message when passed a bad article ID', () => {
+  test('status:400, responds with an error message when passed an out of range article ID integer', () => {
     return request(app)
       .get('/api/articles/1000')
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe('Article Not Found');
+      });
+  });
+  test('status:400, responds with an error message when passed a bad article ID (string instead of int)', () => {
+    return request(app)
+      .get('/api/articles/abadid')
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Invalid input');
       });
   });
 });
@@ -211,7 +220,7 @@ describe('GET /api/articles', () => {
         ]);
       });
   });
-  test('responds with status 400 is order_by is passed an invalid sort query', () => {
+  test('responds with status 400 if order_by is passed an invalid sort query', () => {
     return request(app)
       .get('/api/articles?order_by=invalidsortquery')
       .expect(400)
@@ -222,7 +231,7 @@ describe('GET /api/articles', () => {
   });
 });
 
-describe('5. PATCH /api/artilces/:articles_id', () => {
+describe('PATCH /api/artilces/:articles_id', () => {
   test('status:200, responds with the updated article', () => {
     const articleUpdates = { inc_vote: 1 };
     return request(app)
@@ -313,7 +322,6 @@ describe('GET /api/articles/:articles_id/comments', () => {
       });
   });
 });
-
 describe('POST /api/articles/:article_id/comments', () => {
   test('status 201: accepts object and returns new comment', () => {
     return request(app)
@@ -367,22 +375,36 @@ describe('POST /api/articles/:article_id/comments', () => {
         expect(res.body.msg).toEqual('Bad Request - Tried to send Null Value');
       });
   });
-});
-
-describe('DELETE /api/comments/:comment_id', () => {
-  test('status 204 accepts object and returns new comment', () => {
-    return request(app).delete('/api/comments/18').expect(204);
+  test('countCommentsById: returns an integer of the number of comments referenced by the passed article id', () => {
+    expect(countCommentsById(1)).toBe(11);
   });
 });
-
-describe('Error handling testing', () => {
-  test('status 404 - catches 404 errors and displays cutom message', () => {
+describe('DELETE /api/comments/:comment_id', () => {
+  test('status 204 deletes the comment referenced at comment_id', () => {
+    return request(app)
+      .delete('/api/comments/18')
+      .expect(204)
+      .then(() => {
+        return db.query('SELECT * FROM comments WHERE comment_id=18;');
+      })
+      .then(({ rowCount }) => {
+        expect(rowCount).toBe(0);
+      });
+  });
+});
+describe('404 Error handling testing', () => {
+  test('status 404 - catches 404 errors and displays custom message', () => {
     return request(app)
       .get('/api/notanendpoint')
       .expect(404)
       .then((res) => {
         console.log(Object.keys(res));
-        expect(res.msg).toBe('Invalid Endpoint');
+        console.log(res.body);
+        expect(res.body.msg).toBe('Invalid Endpoint');
       });
   });
+});
+
+describe('Utilities functions', () => {
+  test('returns a JSON object showing all the endpoints');
 });
