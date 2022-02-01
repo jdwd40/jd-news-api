@@ -405,6 +405,6 @@ describe('404 Error handling testing', () => {
   });
 });
 
-describe('Utilities functions', () => {
-  test('returns a JSON object showing all the endpoints');
-});
+// describe('Utilities functions', () => {
+//   test('returns a JSON object showing all the endpoints');
+// });
